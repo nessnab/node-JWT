@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, 'Please enter a password'],
+    required: [true, ' Please enter a password'],
     minlength: [6, 'Password must be at least 6 characters']
   }
 });
@@ -24,11 +24,32 @@ userSchema.pre('save', async function () {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-// fire a function after doc saved to db
-// userSchema.post('save', async function (doc) {
-//   console.log('new user was created & saved', doc);
-// });
+// // static method to login user
+userSchema.statics.login = async function(email, password) {
+  const user = await this.findOne({ email });
 
+  if (user) {
+    const auth = await bcrypt.compare(password, user.password);
+    if (auth) {
+      return user;
+    }
+    throw Error('incorrect password')
+  } 
+  throw Error('incorrect email')
+}
+
+// static method to login user
+// userSchema.statics.login = async function(email, password) {
+//   const user = await this.findOne({ email });
+//   if (user) {
+//     const auth = await bcrypt.compare(password, user.password);
+//     if (auth) {
+//       return user;
+//     }
+//     throw Error('incorrect password');
+//   }
+//   throw Error('incorrect email');
+// };
 
 const User = mongoose.model('user', userSchema);
 
