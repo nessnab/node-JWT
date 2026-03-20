@@ -10,6 +10,7 @@ Ness' Documentation on Learning Node.js (& Express) JWT Authentication from tuto
 - **Cookies workflow**: a user visit the web, then server will send a JWT cookies to store in user' browser, through the cookie it will checked wether a user is signed/logged or not
 - **Signup flow**: user submit their email and password, stored in a database with hashed password, will return error message if the email is registered / password less than 6 char
 - **Login flow**: user submit email and password, bycript will compare those with email stored on the db and the hashed password, will return error if either email/password is incorrect.
+- **Protecting routes**: whenever user want to go to the protected page, it will redirect user to login page, if they are logged in it'll go to the protected page. using middleware that can be reused.
 
 
 **Source code on each branch for each lesson learned**
