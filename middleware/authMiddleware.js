@@ -1,4 +1,25 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/users');
+
+// check current user
+const checkUser = (req, res, next) => {
+  const token = req.cookies.jwt;
+  if (token) {
+    jwt.verify(token, 'martiny is cute secret', async (err, decodedToken) => {
+      if (err) {
+        res.locals.user = null;
+        next();
+      } else {
+        let user = await User.findById(decodedToken.id);
+        res.locals.user = user;
+        next();
+      }
+    });
+  } else {
+    res.locals.user = null;
+    next();
+  }
+};
 
 const requireAuth = (req, res, next) => {
   
@@ -20,4 +41,5 @@ const requireAuth = (req, res, next) => {
   }
 }
 
-module.exports = { requireAuth };
+
+module.exports = { checkUser, requireAuth };
